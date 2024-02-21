@@ -20,7 +20,9 @@ void print_output(int *a,int *b ,int *c) {
 }
 
 __global__ void deivce_add(int *a ,int *b, int *c) {
-  c[threadIdx.x] = a[threadIdx.x] + b[threadIdx.x]
+  int index = threadIdx.x+blockIdx.x * blockDim.x
+  //c[threadIdx.x] = a[threadIdx.x] + b[threadIdx.x]
+    c[index]=a[index]+b[index];
 }
 
 int main(void) {

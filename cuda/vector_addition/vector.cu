@@ -39,7 +39,10 @@ int main(void) {
 
   cudaMemcopy(d_b,b, N * sizeof(int),cudaMemcpyHostToDevice);
 
-  deivce_add<<<1,1>>>(d_a,d_b,d_c);
+  threads_pre_block = 8;
+  no_of_blocks = N /threads_pre_block;
+
+  deivce_add<<<no_of_blocks,threads_pre_block>>>(d_a,d_b,d_c);
   // copy result back to host
   cudaMemcpy(c, d_c, N * sizeof(int), cudaMemcpyHostToDevice);
 
