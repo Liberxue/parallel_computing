@@ -20,7 +20,7 @@ void print_output(int *a,int *b ,int *c) {
 }
 
 __global__ void deivce_add(int *a ,int *b, int *c) {
-  c[blockIdx.x] = a[blockIdx.x] + b[blockIdx.x]
+  c[threadIdx.x] = a[threadIdx.x] + b[threadIdx.x]
 }
 
 int main(void) {
@@ -39,7 +39,7 @@ int main(void) {
 
   cudaMemcopy(d_b,b, N * sizeof(int),cudaMemcpyHostToDevice);
 
-  deivce_add<<<1,1>>>(d_a,d_b,d_c);
+  deivce_add<<<1,N>>>(d_a,d_b,d_c);
   // copy result back to host
   cudaMemcpy(c, d_c, N * sizeof(int), cudaMemcpyHostToDevice);
 
