@@ -19,15 +19,34 @@ void print_output(int *a,int *b ,int *c) {
     printf("\n %d + %d = %d",a[idx],b[idx],c[idx]);
 }
 
+__global__ void deivce_add(int *a ,int *b, int *c) {
+  c[blockIdx.x] = a[blockIdx.x] + b[blockIdx.x]
+}
+
 int main(void) {
   int *a,*b,*c;
+  int *d_a,*d_b,*d_c;
   int size = N * sizeof(int);
   a = (int *) malloc(size); fill_array(a);
   b = (int *) malloc(size); fill_array(b);
   c = (int *) malloc(size);
-  host_add(a,b,c);
-  print_output(a,b,c);
-  free(a);free(b);free(c);
-  return 0x00;
+  // Alloc space for deivce
+  cudaMalloc((void *)&d_a,N * sizeof(int));
+  cudaMalloc((void *)&d_b,N *sizeof(int));
+  cudaMalloc((void *)&d_c,N *sizeof(int));
+  // copy form host to deivce
+  cudaMemcopy(d_a,a, N * sizeof(int),cudaMemcpyHostToDevice);
 
+  cudaMemcopy(d_b,b, N * sizeof(int),cudaMemcpyHostToDevice);
+
+  deivce_add<<<1,1>>>(d_a,d_b,d_c);
+  // copy result back to host
+  cudaMemcpy(c, d_c, N *sizeof(int), cudaMemcpyHostToDevice);
+
+ // host_add(a,b,c);
+  print_output(a,b,c);
+ // free(a);free(b);free(c);
+  cudaFree(d_a);cudaFree(d_b); cudaFree(d_c);
+
+  return 0x00;
 }
