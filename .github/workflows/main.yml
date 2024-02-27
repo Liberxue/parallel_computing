@@ -20,19 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cache CUDA Toolkit
-        uses: actions/cache@v2
-        with:
-          path: /usr/local/cuda
-          key: ${{ runner.os }}-cuda-${{ hashFiles('**/cuda-version.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-cuda-
-
       - name: Install CUDA Toolkit
-        uses: Jimver/cuda-toolkit@v0.2.11
+        uses: Jimver/cuda-toolkit@v0.2.14
         if: steps.cache-cuda.outputs.cache-hit != 'true'
         with:
-          cuda: "12.1.0"
+          cuda: "12.3.2"
 
       - name: Cache Dependencies
         uses: actions/cache@v2
@@ -48,7 +40,6 @@ jobs:
         run: |
           # Add commands to install dependencies here
 
-      # - name: Compile CUDA Project
-      #   run: |
-      #     nvcc -o test sha256_test.cu sha256.cu -lcuda
-      #     nvcc -o liber main.cu  -lcuda
+      - name: Compile CUDA Project
+        run: |
+          # nvcc -v

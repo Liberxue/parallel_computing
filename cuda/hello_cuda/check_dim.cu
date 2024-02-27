@@ -6,7 +6,7 @@
 #include <string.h>
 
 
-__global__ void checkIndex(void) 
+__global__ void checkIndex(void)
 {
     printf("threadIdx:(%d, %d, %d) blockIdx:(%d, %d, %d) blockDim:(%d, %d, %d) gridDim:(%d, %d, %d)\n"
     , threadIdx.x, threadIdx.y, threadIdx.z
@@ -18,7 +18,7 @@ __global__ void checkIndex(void)
 
 int checkDimMain()
 {
-    int nElem = 6;
+  int nElem = 6;
 	dim3 block(3);
 	dim3 grid((nElem + block.x - 1) / block.x);
 
