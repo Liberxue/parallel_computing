@@ -20,7 +20,7 @@ void sum(const float* A, const float* B, float* C, int n_el) {
     blocksPerGrid   = ceil(double(n_el)/double(threadsPerBlock));
   }
 
-  // invoke the kernel 内核直接调用
+  // invoke the kernel
   kernel_sum<<<blocksPerGrid,threadsPerBlock>>>(A, B, C, n_el);
 }
 
@@ -29,6 +29,6 @@ __global__ void kernel_sum(const float* A, const float* B, float* C, int n_el)
 {
   // calculate the unique thread index
   int tid = blockDim.x * blockIdx.x + threadIdx.x;
-  // perform tid-th elements addition 
+  // perform tid-th elements addition
   if (tid < n_el) C[tid] = A[tid] + B[tid];
 }
